@@ -30,11 +30,18 @@ def getCovidCases(countries=None, provinces=None, start_date=None, end_date=None
             
 
             
+    iso_df = getIsoDf()
+               
+    df = pd.merge(df, iso_df, left_on="country_region", right_on='name')
+    
+    return df
+
+def getIsoDf():
     iso_df = pd.read_csv('https://raw.githubusercontent.com/lukes/ISO-3166-Countries-with-Regional-Codes/master/slim-3/slim-3.csv')
     iso_df = iso_df[['name', 'alpha-3']]
     iso_df.loc[iso_df.name=="United States of America", 'name'] = 'US'
     iso_df.loc[iso_df.name=="China", 'name'] = 'Mainland China'
-    iso_df.loc[iso_df.name=="United Kingdom", 'name'] = 'UK'
+    iso_df.loc[iso_df.name=="United Kingdom of Great Britain and Northern Ireland", 'name'] = 'United Kingdom'
     iso_df.loc[iso_df.name=="Russian Federation", 'name'] = 'Russia'
     iso_df.loc[iso_df.name=="Korea, Republic of", 'name'] = 'South Korea'
     iso_df.loc[iso_df.name=="Macao", 'name'] = 'Macau'
@@ -47,10 +54,7 @@ def getCovidCases(countries=None, provinces=None, start_date=None, end_date=None
     iso_df.loc[iso_df.name=="Moldova, Republic of", 'name'] = 'Moldova'
     iso_df.loc[iso_df.name=="Ireland", 'name'] = 'Republic of Ireland'
     iso_df.loc[iso_df.name=="Holy See", 'name'] = 'Vatican City'
-               
-    df = pd.merge(df, iso_df, left_on="country_region", right_on='name')
-    
-    return df
+    return iso_df
 
 def getCovidCasesWide(countries=None, start_date=None, end_date=None, casetype=['confirmed', 'death', 'recovered'], cumsum=False):
     df = pd.read_csv('https://raw.githubusercontent.com/RamiKrispin/coronavirus-csv/master/coronavirus_dataset.csv',
@@ -89,23 +93,7 @@ def getCovidCasesWide(countries=None, start_date=None, end_date=None, casetype=[
         
         
 
-    iso_df = pd.read_csv('https://raw.githubusercontent.com/lukes/ISO-3166-Countries-with-Regional-Codes/master/slim-3/slim-3.csv')
-    iso_df = iso_df[['name', 'alpha-3']]
-    iso_df.loc[iso_df.name=="United States of America", 'name'] = 'US'
-    iso_df.loc[iso_df.name=="China", 'name'] = 'China'
-    iso_df.loc[iso_df.name=="United Kingdom", 'name'] = 'UK'
-    iso_df.loc[iso_df.name=="Russian Federation", 'name'] = 'Russia'
-    iso_df.loc[iso_df.name=="Korea, Republic of", 'name'] = 'South Korea'
-    iso_df.loc[iso_df.name=="Macao", 'name'] = 'Macau'
-    iso_df.loc[iso_df.name=="Taiwan, Province of China", 'name'] = 'Taiwan'
-    iso_df.loc[iso_df.name=="Viet Nam", 'name'] = 'Vietnam'
-    iso_df.loc[iso_df.name=="Iran (Islamic Republic of)", 'name'] = 'Iran'
-    iso_df.loc[iso_df.name=="Czechia", 'name'] = 'Czech Republic'
-    iso_df.loc[iso_df.name=="Saint Barthélemy", 'name'] = 'Saint Barthelemy'
-    iso_df.loc[iso_df.name=="Palestine, State of", 'name'] = 'Palestine'
-    iso_df.loc[iso_df.name=="Moldova, Republic of", 'name'] = 'Moldova'
-    iso_df.loc[iso_df.name=="Ireland", 'name'] = 'Republic of Ireland'
-    iso_df.loc[iso_df.name=="Holy See", 'name'] = 'Vatican City'
+    iso_df = getIsoDf()
 
 
     
@@ -151,7 +139,7 @@ def plot_provinces(countries=None, provinces=None, start_date=None, end_date=Non
                     'Northwest Territory': 44598,  
                     'Yukon': 40369,  
                     'Nunavut': 38787
-                    };
+                    }
 
 
 
